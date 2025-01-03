@@ -25,7 +25,7 @@ class Stack (Generic[T]):
             if self.first.next is None:
                 self.first = None;
             else:
-                self.first.removeFromBeginning()
+                self.first.removeBeginning()
             return tmp;
         return None;
 

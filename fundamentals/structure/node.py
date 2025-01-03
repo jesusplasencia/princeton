@@ -5,10 +5,15 @@ T = TypeVar("T");
 # Page 177 - Algorithm Book
 
 class Node(Generic[T]):
+
     def __init__(self):
         self.item : T | None = None;
         self.next : Node | None = None;
-
+    
+    def __init__(self, item : T = None, next = None):
+        self.item = item;
+        self.next = next;
+    
     def __str__(self):
         strTmp = "";
         while (self.next):
@@ -33,14 +38,13 @@ class Node(Generic[T]):
         self.item = incoming;
         self.next = temp;
 
-    def removeFromBeginning(self) -> None:
-        if (not self.item): return;
-        if (not self.next):
+    def removeBeginning(self) -> None:
+        if (not self.item): return None;
+        if self.next is None:
             self.item = None;
-            return None;
-        else:
-            self.item = self.next.item;
-            self.next = self.next.next;
+            return
+        self.item = self.next.item;
+        self.next = self.next.next;
 
     def insertAtEnd(self, incoming: T) -> None:
         if (not self.item):
@@ -80,5 +84,101 @@ class Node(Generic[T]):
             # If `current.next.next` is None, it means we're at the last node to be deleted
             current.next = None
 
-    def find(self, key: T) -> bool:
-        pass;
+    def find(self, key: T = None) -> bool:
+        if not key: return False;
+        if not self.item: return False;
+
+        if (self.item == key): return True;
+
+        while self.next:
+            self = self.next;
+            if (self.item == key): return True;
+        return False;
+
+    def removeAfter(self, key : T = None) -> None:
+        if not key: return False;
+        if not self.item: return None;
+        
+        if (self.item == key):
+            self.next = None;
+            return None;
+        
+        while self.next:
+            self = self.next;
+            if self.item == key:
+                self.next = None;
+                break;
+        return None;
+
+    def insertAfter(self, val : T = None, key : T = None,) -> None:
+        if not key or not self.item: return None;
+
+        current = self;
+        while current:
+            if current.item == key:
+                newNode = Node();
+                newNode.item = val;
+                newNode.next = current.next;
+                current.next = newNode;
+                return None;
+            current = current.next;
+        return None;
+        
+    def remove(self, key: T = None) -> None:
+        if key is None or self.item is None: return None;
+        
+        dummy = Node();
+        dummy.item = 0;
+        dummy.next = self;
+
+        current = dummy;
+        while current.next:
+            if (current.next.item == key):
+                # Remove the node by skipping it
+                current.next = current.next.next;
+            else:
+                # Move to the next node
+                current = current.next;
+
+        # Return the new head of the list (in case the head was removed)
+        return dummy.next;
+
+    def max(self) -> int:
+        max = 0;
+        dummy = Node();
+        dummy.item = 0;
+        dummy.next = self;
+        while dummy.next:
+            if (dummy.next.item > max):
+                max = dummy.next.item;
+            dummy = dummy.next;
+        return max;
+
+    def reverse(self):
+        reversed = None;
+        while self:
+            tmp = self.next;
+            newHead = Node(self.item, reversed);
+            reversed = newHead;
+            self = tmp;
+        return reversed;
+
+
+if __name__ == "__main__":
+    node = Node();
+    node.insertAtEnd(3);
+    # node.insertAtEnd(4);
+    node.removeBeginning();
+    print(str(node));
+    # node.insertAtEnd(8);
+    # node.insertAtEnd(10);
+
+    # print(str(node));
+    # node.insertAfter(9, 8);
+    # node.insertAfter(9, 9);
+    # print(str(node));
+    # print(node.remove(9));
+    # node.insertAtEnd(20);
+    # print(str(node));
+    # print(node.max());
+    # print(node.reverse());
