@@ -26,7 +26,8 @@ class Node(Generic[T]):
         val, self = self.item, self.next;
         return f"Node({val}, {self.__repr__()})";
 
-    def insertAtBeginning(self, incoming: T) -> None:
+    def prepend(self, incoming: T) -> None:
+        """ Add an element to the beginning of the list """
         if (not self.item):
             self.item = incoming;
             return;
@@ -38,7 +39,8 @@ class Node(Generic[T]):
         self.item = incoming;
         self.next = temp;
 
-    def removeBeginning(self) -> None:
+    def removeFirst(self) -> None:
+        """ Remove the first Node in the list """
         if (not self.item): return None;
         if self.next is None:
             self.item = None;
@@ -46,7 +48,8 @@ class Node(Generic[T]):
         self.item = self.next.item;
         self.next = self.next.next;
 
-    def insertAtEnd(self, incoming: T) -> None:
+    def append(self, incoming: T) -> None:
+        """ Add an element to the end of the Node """
         if (not self.item):
             self.item = incoming;
             return;
@@ -57,7 +60,8 @@ class Node(Generic[T]):
         newNode.item = incoming;
         current.next = newNode;
 
-    def delete(self, k: int) -> None:
+    def deleteAt (self, k: int) -> None:
+        """ Delete the k-th node in the list """
         if not self.item:
             return  # Empty list, nothing to delete
 
@@ -72,66 +76,57 @@ class Node(Generic[T]):
             return
 
         current = self
-        i = 1
-        while current.next and i < k - 1:
-            current = current.next
-            i += 1
+        for _ in range (k - 2):
+            # Out of Bounds
+            if not current.next:
+                return; 
+            current = current.next;
+        
+        if current.next:
+            current.next = current.next.next;
 
-        # Check if `current.next` is valid before attempting to access `current.next.next`
-        if current.next and current.next.next:
-            current.next = current.next.next
-        elif current.next:
-            # If `current.next.next` is None, it means we're at the last node to be deleted
-            current.next = None
+    def contains (self, key: T = None) -> bool:
+        """ Check if the List contains a Node with the given key """
+        if key is None or self.item is None: return False;
 
-    def find(self, key: T = None) -> bool:
-        if not key: return False;
-        if not self.item: return False;
-
-        if (self.item == key): return True;
-
-        while self.next:
-            self = self.next;
-            if (self.item == key): return True;
+        current = self;
+        while current:
+            if (current.item == key): return True;
+            current = current.next;
         return False;
 
     def removeAfter(self, key : T = None) -> None:
-        if not key: return False;
-        if not self.item: return None;
+        """ Remove all nodes after the node with the given key """
+        if key is None or self.item is None: return None;
         
-        if (self.item == key):
-            self.next = None;
-            return None;
-        
-        while self.next:
-            self = self.next;
-            if self.item == key:
-                self.next = None;
+        current = self;
+        while current:
+            if current.item == key:
+                current.next = None;
                 break;
+            current = current.next;
         return None;
 
-    def insertAfter(self, val : T = None, key : T = None,) -> None:
-        if not key or not self.item: return None;
+    def insertAfter(self, key : T = None, value : T = None) -> None:
+        """ Insert a new node with `value` after the node with `key`. """
+        if key is None or self.item is None or value is None: return None;
 
         current = self;
         while current:
             if current.item == key:
-                newNode = Node();
-                newNode.item = val;
-                newNode.next = current.next;
+                newNode = Node(value, current.next);
                 current.next = newNode;
-                return None;
+                break;
             current = current.next;
         return None;
         
-    def remove(self, key: T = None) -> None:
+    def removeAll(self, key: T = None) -> None:
+        """ Remove all nodes with the given key """
         if key is None or self.item is None: return None;
         
-        dummy = Node();
-        dummy.item = 0;
-        dummy.next = self;
-
+        dummy = Node(0, self);
         current = dummy;
+
         while current.next:
             if (current.next.item == key):
                 # Remove the node by skipping it
@@ -143,30 +138,34 @@ class Node(Generic[T]):
         # Return the new head of the list (in case the head was removed)
         return dummy.next;
 
-    def max(self) -> int:
-        max = 0;
-        dummy = Node();
-        dummy.item = 0;
-        dummy.next = self;
-        while dummy.next:
-            if (dummy.next.item > max):
-                max = dummy.next.item;
-            dummy = dummy.next;
-        return max;
+    def findMax(self) -> int:
+        """ Find the maxmimum value in the list """
+        if self.item is None:
+            return float('-inf');
+    
+        current = self;
+        maxValue = current.item;
+        while current:
+            if (current.item > maxValue):
+                maxValue = current.item;
+            current = current.next;
+        return maxValue;
 
     def reverse(self):
+        """ Reverse the Linked List """
         reversed = None;
-        while self:
-            tmp = self.next;
-            newHead = Node(self.item, reversed);
+        current = self;
+
+        while current:
+            newHead = Node(current.item, reversed);
             reversed = newHead;
-            self = tmp;
+            current = current.next;
         return reversed;
 
 
 if __name__ == "__main__":
     node = Node();
-    node.insertAtEnd(3);
+    node.insertAtBeginning(3);
     # node.insertAtEnd(4);
     node.removeBeginning();
     print(str(node));
