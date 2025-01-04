@@ -10,13 +10,12 @@ class Bag(Generic[T]):
 
     def add (self, item: T) -> None:
         if not self.container:
-            new_node = Node();
-            new_node.item = item;
-            self.container = new_node;
+            newNode = Node(item);
+            self.container = newNode;
             self.n = 1;
         else:
             self.n += 1;
-            self.container.insertAtEnd(item);
+            self.container.append(item);
 
     def isEmpty(self, ) -> bool:
         return self.n == 0;

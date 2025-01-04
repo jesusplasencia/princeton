@@ -164,10 +164,10 @@ class Node(Generic[T]):
 
 
 if __name__ == "__main__":
-    node = Node();
-    node.insertAtBeginning(3);
+    node = Node[int]();
+    node.prepend(3);
     # node.insertAtEnd(4);
-    node.removeBeginning();
+    node.removeFirst();
     print(str(node));
     # node.insertAtEnd(8);
     # node.insertAtEnd(10);
