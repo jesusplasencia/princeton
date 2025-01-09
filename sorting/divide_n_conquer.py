@@ -1,4 +1,4 @@
-# Page 58 (Introduction to Algorithms Third Edition 2009)
+# Page 60 (Introduction to Algorithms Third Edition 2009)
 # python -m doctest divide_n_conquer.py -v
 def merge(A, p, q, r):
     """
@@ -46,9 +46,10 @@ def merge(A, p, q, r):
 
 def merge_sort(arr):
     """
-    Merge Sort Array Algorithm
+    Merge Sort Array Algorithm In-Place
     >>> A = [3, 41, 52, 26, 38, 57, 9, 49]
     >>> merge_sort(A);
+    >>> A
     [3, 9, 26, 38, 41, 49, 52, 57]
     """
     if len(arr) > 1:
@@ -56,8 +57,6 @@ def merge_sort(arr):
         mid = len(arr) // 2
         left_half = arr[:mid]
         right_half = arr[mid:]
-        
-        print(f"Dividing: {arr} -> Left: {left_half}, Right: {right_half}")
         
         # Recursively sort both halves
         merge_sort(left_half)
@@ -86,5 +85,3 @@ def merge_sort(arr):
             arr[k] = right_half[j]
             j += 1
             k += 1
-        
-        print(f"Merging: Left: {left_half}, Right: {right_half} -> Merged: {arr}")
