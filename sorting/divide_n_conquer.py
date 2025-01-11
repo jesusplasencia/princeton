@@ -1,4 +1,4 @@
-# Page 89 (Introduction to Algorithms Third Edition 2009)
+# Page 90 (Introduction to Algorithms Third Edition 2009)
 # python -m doctest divide_n_conquer.py -v
 def merge(A, p, q, r):
     """
@@ -85,3 +85,24 @@ def merge_sort(arr):
             arr[k] = right_half[j]
             j += 1
             k += 1
+
+def max_subarray_problem_brute_force(arr):
+    """
+    Find the lowest and maximum values and give the profit you win
+    i-th lowest < j-th maximum
+    T(n) = Θ(n^2)
+    >>> Stock = [100, 113, 110, 85, 105, 102, 86, 63, 81, 101, 94, 106, 101, 79, 94, 90, 97];
+    >>> max_subarray_problem_brute_force(Stock)
+    43
+    """
+    profit = 0;
+    for i in range(len(arr)):
+        profit_line = 0;
+        key = arr[i];
+        for j in range(i + 1, len(arr)):
+            local_profit = arr[j] - key;
+            if (local_profit > profit_line):
+                profit_line = local_profit;
+        if (profit_line > profit):
+            profit = profit_line;
+    return profit;
