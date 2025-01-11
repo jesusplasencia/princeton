@@ -1,4 +1,4 @@
-# Page 64 (Introduction to Algorithms Third Edition 2009)
+# Page 89 (Introduction to Algorithms Third Edition 2009)
 # python -m doctest divide_n_conquer.py -v
 def merge(A, p, q, r):
     """
