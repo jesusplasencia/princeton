@@ -1,4 +1,4 @@
-# Page 90 (Introduction to Algorithms Third Edition 2009)
+# Page 96 (Introduction to Algorithms Third Edition 2009)
 # python -m doctest divide_n_conquer.py -v
 def merge(A, p, q, r):
     """
@@ -106,3 +106,49 @@ def max_subarray_problem_brute_force(arr):
         if (profit_line > profit):
             profit = profit_line;
     return profit;
+
+def find_max_crossing_subarray(A, low, mid, high):
+    left_sum = float('-inf');
+    summ = 0;
+    max_left = mid
+    for i in range(mid, low - 1, -1):
+        summ = summ + A[i];
+        if summ > left_sum:
+            left_sum = summ;
+            max_left = i;
+
+    right_sum = float('-inf');
+    summ = 0;
+    max_right = mid + 1
+    for j in range(mid + 1, high + 1):
+        summ = summ + A[j];
+        if summ > right_sum:
+            right_sum = summ;
+            max_right = j;
+
+    return max_left, max_right, left_sum + right_sum;
+
+def find_maximum_subarray(A, low, high):
+    """
+    T(n) = { 
+                O(1), n = 1
+                2T(n/2) + O(n)
+            }
+    >>> Profits = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7];
+    >>> find_maximum_subarray(Profits, 0, len(Profits) - 1);
+    (7, 10, 43)
+    """
+    if high == low: # Base case: only one element
+        return low, high, A[low];
+    else:
+        mid = (low + high) // 2;
+        left_low, left_high, left_sum = find_maximum_subarray(A, low, mid);
+        right_low, right_high, right_sum = find_maximum_subarray(A, mid + 1, high);
+        cross_low, cross_high, cross_sum = find_max_crossing_subarray(A, low, mid, high);
+        
+        if left_sum >= right_sum and left_sum >= cross_sum:
+            return left_low, left_high, left_sum;
+        elif right_sum >= left_sum and right_sum >= cross_sum:
+            return right_low, right_high, right_sum;
+        else:
+            return cross_low, cross_high, cross_sum;
