@@ -1,5 +1,6 @@
 from divide_n_conquer import max_subarray_problem_brute_force, find_maximum_subarray;
-from helper import generate_array, time_function;
+from helpers.time import time_function;
+from helpers.random import generate_array;
 
 def test_algorithms():
     sizes = [10, 100, 1000, 5000, 10000];
