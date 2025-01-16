@@ -16,14 +16,26 @@ def square_matrix_multiplication(A, B):
     return C;
 
 def square_matrix_multiplication_recursive(A, B):
-    n = len(A);
-    C = [ [ 0 for _ in range(n) ] for _ in range(n) ];
-
+    n = A.shape[0]
     if n == 1:
-        C[0][0] = A[0][0] * B[0][0];
+        return A * B
     else:
-        pass;
-    return C;
+        # Split the matrices into quadrants
+        mid = n // 2
+        A11, A12, A21, A22 = A[:mid, :mid], A[:mid, mid:], A[mid:, :mid], A[mid:, mid:]
+        B11, B12, B21, B22 = B[:mid, :mid], B[:mid, mid:], B[mid:, :mid], B[mid:, mid:]
+        C11 = square_matrix_multiplication_recursive(A11, B11) + square_matrix_multiplication_recursive(A12, B21)
+        C12 = square_matrix_multiplication_recursive(A11, B12) + square_matrix_multiplication_recursive(A12, B22)
+        C21 = square_matrix_multiplication_recursive(A21, B11) + square_matrix_multiplication_recursive(A22, B21)
+        C22 = square_matrix_multiplication_recursive(A21, B12) + square_matrix_multiplication_recursive(A22, B22)
+        
+        # Combine the quadrants into a single matrix
+        C = np.zeros((n, n))
+        C[:mid, :mid] = C11
+        C[:mid, mid:] = C12
+        C[mid:, :mid] = C21
+        C[mid:, mid:] = C22
+        return C;
 
 import numpy as np;
 
@@ -86,7 +98,6 @@ A = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]]);
 B = np.array([[1, 4, 6], [2, 3, 5], [6, 7, 8]]);
 
 # Ensure matrices are square and padded if necessary
-size = max(len(A), len(A[0]), len(B), len(B[0]));
 A_padded = pad_matrix(A);
 B_padded = pad_matrix(B);
 
@@ -96,5 +107,5 @@ result = strassen_matrix_multiply(A_padded, B_padded);
 # Trim the result to the original size
 result = result[:len(A), :len(B[0])]
 
-print("Resultant Matrix:");
+print("Recursive-Method To Multiply Matrices:");
 print(result);
