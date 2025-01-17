@@ -107,5 +107,35 @@ result = strassen_matrix_multiply(A_padded, B_padded);
 # Trim the result to the original size
 result = result[:len(A), :len(B[0])]
 
-print("Recursive-Method To Multiply Matrices:");
-print(result);
+def is_monge_array(A):
+    """
+    Determine if the given array A is a Monge Array.
+    Returns True if A satisfies the Monge property, otherwise False.
+    """
+    rows, cols = A.shape
+    for i in range(rows - 1):  # Iterate over all row pairs
+        for k in range(i + 1, rows):  # Ensure k > i
+            for j in range(cols - 1):  # Iterate over all column pairs
+                for l in range(j + 1, cols):  # Ensure l > j
+                    # Check the Monge property
+                    if A[i][j] + A[k][l] > A[i][l] + A[k][j]:
+                        return False
+    return True
+
+def is_monge_array_optimized(A):
+    """
+    Determine if the given array A is a Monge Array in O(n^2) time.
+    Returns True if A satisfies the Monge property, otherwise False.
+    """
+    rows, cols = A.shape
+    for i in range(rows - 1):  # Iterate over all pairs of rows
+        for j in range(cols - 1):  # Iterate over all adjacent columns
+            # Check the Monge property for rows i and i+1, columns j and j+1
+            if A[i][j+1] - A[i][j] > A[i+1][j+1] - A[i+1][j]:
+                return False
+    return True
+    
+C = np.array([[10, 17, 13, 28, 23], [17, 22, 16, 29, 23], [24, 28, 22, 34, 24], [11, 13, 6, 17, 7], [45, 44, 32, 37, 23], [36, 33, 19, 21, 6], [75, 66, 51, 53, 34]]);
+D = np.array([[37, 23, 22, 32], [21, 6, 7, 10], [53, 34, 30, 31], [32, 13, 9, 6], [43, 21, 15, 8]]);
+
+print(is_monge_array(D));
