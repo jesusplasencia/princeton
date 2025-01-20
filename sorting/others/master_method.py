@@ -1,5 +1,3 @@
-# Page 135
-
 # T (n) = a T(n / b) + f(n)
 # 1. if f(n) = O(n ^ log_b(a - e))      e > 0 : T (n) = Theta(n ^ log_b(a))
 # 2. if f(n) = Theta(n ^ log_b(a))            : T (n) = Theta(n ^ log_b(a) * lg(n))

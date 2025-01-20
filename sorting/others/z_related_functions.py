@@ -1,4 +1,3 @@
-# Page 43: Introduction to Algorithms 3rd Edition
 def insertion_sort_asc(arr):
     # Running time O (n²) - theta n - squared
     for j in range(1, len(arr)):
