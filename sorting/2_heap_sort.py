@@ -6,37 +6,79 @@
 # HeapSort --> Max Heap
 
 # Max_Heapify: Function to maintain the max-heap property
-def max_heapify(array, n = len(array), idx):
+def max_heapify(arr, n, i):
     """
-    Ensures the max-heap property for a subtree rooted at index `i`.
+    Ensures the subtree rooted at index `i` satisfies the max-heap property.
+    A max-heap means every parent node is greater than or equal to its children.
 
-    Args:
-        arr (list): The heap array.
-        n (int): The size of the heap.
-        i (int): The index of the root of the subtree.
+    Parameters:
+    - arr: List[int], the array representing the heap.
+    - n: int, the size of the heap.
+    - i: int, the index of the root of the subtree to heapify.
 
-    Time Complexity: O(log n)
-    Space Complexity: O(1)
+    The function modifies the input array in place.
 
-    Example:
-    >>> arr = [1, 14, 10, 8, 7, 9, 3, 2, 4, 6]
-    >>> max_heapify(arr, len(arr), 1)
+    Running Time:
+    - Best Case: O(1) (when the subtree rooted at `i` is already a valid max-heap)
+    - Worst Case: O(log n) (when the element at `i` is moved all the way down the tree)
+    - Average Case: O(log n) (depends on the height of the tree)
+
+    Why it's important:
+    - This function is the foundation of the heap sort algorithm and other heap-based algorithms.
+    - It maintains the heap structure, ensuring efficient operations like `insert` and `extract-max`.
+    - The max-heap property enables quick access to the maximum element (root of the heap) in O(1) time.
+
+    Doctest:
+    >>> arr = [3, 19, 1, 14, 8, 7, 4]
+    >>> n = len(arr)
+    >>> max_heapify(arr, n, 1)
     >>> arr
-    [14, 8, 10, 6, 7, 9, 3, 2, 4, 1]
-    """
-    largest = idx;
-    left = 2 * idx + 1;
-    right = 2 * idx + 2;
-    
-    # Check if the left child exists and is greater than the root
-    if left < n and array[left] > array[largest]:
-        largest = left;
-    
-    # Check if the right child exists and is greater than the current largest
-    if right < n and arr[right] > arr[largest]:
-        largest = right;
+    [3, 19, 7, 14, 8, 1, 4]
 
-    # If the largest is not the root, swap and continue heapifying
-    if largest != idx:
-        arr[idx], arr[largest] = arr[largest], arr[idx]
-        max_heapify(arr, len(arr), largest)
+    Explanation:
+    - Initially, the subtree rooted at index 1 (value 19) violates the max-heap property
+      because one of its children (index 5, value 8) is smaller than its sibling (index 3, value 14).
+    - After heapify, the subtree satisfies the max-heap property.
+
+    """
+    largest = i  # Initialize the largest as root
+    left = 2 * i + 1  # Left child index
+    right = 2 * i + 2  # Right child index
+
+    # Check if left child exists and is greater than root
+    if left < n and arr[left] > arr[largest]:
+        largest = left
+
+    # Check if right child exists and is greater than the largest so far
+    if right < n and arr[right] > arr[largest]:
+        largest = right
+
+    # If the largest is not root, swap and continue heapifying
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]
+        max_heapify(arr, n, largest)
+
+def build_max_heap(arr):
+    """
+    Converts an array into a max-heap.
+
+    Parameters:
+    - arr: List[int], the array to be heapified.
+
+    Running Time:
+    - O(n), where n is the size of the array. Although `max_heapify` is O(log n),
+      this process applies it in a way that the total cost sums to O(n).
+
+    Doctest:
+    >>> arr = [3, 19, 1, 14, 8, 7, 4]
+    >>> build_max_heap(arr)
+    >>> arr
+    [19, 14, 7, 3, 8, 1, 4]
+
+    Explanation:
+    - After heapifying the entire array, the root (index 0) is the largest element.
+    """
+    n = len(arr)
+    # Start from the last non-leaf node and move upward
+    for i in range((n // 2) - 1, -1, -1):
+        max_heapify(arr, n, i)
