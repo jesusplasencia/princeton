@@ -44,7 +44,7 @@ class MinPriorityQueue:
         if k > self.heap[i]:
             raise ValueError("New key is greater than current key.")
 
-        self.heap[i] = k
+        self.heap[i] -= k
         heapq.heapify(self.heap)  # Restore heap property
 
     def __str__(self):
