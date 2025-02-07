@@ -1,15 +1,26 @@
-k = 0
+# k = 0
+# rounds = 0
+# n = 16
+# for i in range(n // 2, n):
+#     step = 2
+#     while step < n:
+#         k = k + n // 2
+#         rounds = rounds + 1
+#         step *= 2
+# print("rounds: {0}".format(rounds))
+# print("k: {0}".format(k))
+
+a = 0
 rounds = 0
 n = 16
-for i in range(n // 2, n):
-    step = 2
-    while step < n:
-        k = k + n // 2
-        rounds = rounds + 1
-        step *= 2
-print("rounds: {0}".format(rounds))
-print("k: {0}".format(k))
+i = n
+while i > 0:
+    a += i
+    i = i // 2
+    rounds += 1
 
+print("rounds: {0}".format(rounds))
+print("a: {0}".format(a))
 
 ## this is an algorithm that runs in O(log(n))
 # def binarySearch(arr, left: int, right: int, x: int) -> int:
